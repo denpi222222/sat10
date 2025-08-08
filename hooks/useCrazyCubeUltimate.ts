@@ -4,15 +4,40 @@ import {
   useWriteContract,
   useWaitForTransactionReceipt,
 } from 'wagmi';
-import CrazyCubeUltimateABI_JSON from '@/contracts/abi/CrazyCubeUltimate.json'; // Import ABI
 import { NFT_CONTRACT_ADDRESS, MAIN_CHAIN_ID } from '@/config/wagmi'; // Contract address and network ID
 import { ALLOWED_CONTRACTS } from '@/config/allowedContracts';
 
-// In Wagmi v2 ABI is passed as array. If your JSON file is object with 'abi' field, use CrazyCubeUltimateABI_JSON.abi
-// If JSON file is directly ABI array, then use CrazyCubeUltimateABI_JSON
-// This line tries to handle both cases.
-const contractAbi =
-  (CrazyCubeUltimateABI_JSON as any).abi || CrazyCubeUltimateABI_JSON;
+// Minimal ABI: expose only methods used by the dApp (no admin functions)
+const contractAbi = [
+  {
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+    name: 'burnNFT',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+    name: 'activateNFT',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+] as const;
 
 export function useCrazyCubeUltimate() {
   const { address: accountAddress, chainId } = useAccount();
