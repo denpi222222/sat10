@@ -32,6 +32,7 @@ export function WalletConnectNoSSR() {
   const { isApeChain } = useNetwork();
   const { t } = useTranslation();
   const { open } = useWeb3Modal();
+  const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [isSwapOpen, setIsSwapOpen] = useState(false);
   const [isBlinking, setIsBlinking] = useState(false);
@@ -297,8 +298,8 @@ export function WalletConnectNoSSR() {
           {t('wallet.connect', 'Connect Wallet')}
         </Button>
       ) : !isApeChain ? (
-        <Button
-          onClick={() => open({ view: 'Networks' })}
+          <Button
+            onClick={() => open({ view: 'Networks' })}
           className='bg-red-600 hover:bg-red-700 text-white border-0'
         >
           <AlertTriangle className='w-4 h-4 mr-2' />

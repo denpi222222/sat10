@@ -30,11 +30,11 @@ function WalletEventHandler({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-// Initialize Web3Modal (only with a real Project ID)
+// Initialize Web3Modal (always, using placeholder if no Project ID)
 if (typeof window !== 'undefined' && !(window as any).web3modal_initialized) {
-  const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+  const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'crazycube-project-id';
   const isEnabled = process.env.NEXT_PUBLIC_WEB3_MODAL_ENABLED !== 'false';
-  if (isEnabled && projectId && projectId !== 'crazycube-project-id') {
+  if (isEnabled) {
     try {
       createWeb3Modal({
         wagmiConfig: config,
