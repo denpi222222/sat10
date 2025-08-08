@@ -30,13 +30,11 @@ function WalletEventHandler({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-// Initialize Web3Modal
+// Initialize Web3Modal (only with a real Project ID)
 if (typeof window !== 'undefined' && !(window as any).web3modal_initialized) {
-  const projectId =
-    process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'crazycube-project-id';
+  const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
   const isEnabled = process.env.NEXT_PUBLIC_WEB3_MODAL_ENABLED !== 'false';
-
-  if (isEnabled) {
+  if (isEnabled && projectId && projectId !== 'crazycube-project-id') {
     try {
       createWeb3Modal({
         wagmiConfig: config,
@@ -50,8 +48,8 @@ if (typeof window !== 'undefined' && !(window as any).web3modal_initialized) {
           '--w3m-border-radius-master': '8px',
         },
         featuredWalletIds: [
-          'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
-          '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust Wallet
+          'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+          '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
         ],
       });
       (window as any).web3modal_initialized = true;
