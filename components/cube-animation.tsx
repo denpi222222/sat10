@@ -602,7 +602,8 @@ export function CubeAnimation({ desktopScale = 1 }: CubeAnimationProps) {
           preload='metadata'
           onError={(error: unknown) => {
             const errorMessage = error instanceof Error ? error.message : 'Audio error';
-            console.error('Audio error:', errorMessage);
+            // Удаляем console.error для production безопасности
+            // console.error('Audio error:', errorMessage);
           }}
         >
           <source src={currentTrack?.url || musicTracks[0]?.url || ''} type='audio/mpeg' />
