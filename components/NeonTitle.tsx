@@ -18,7 +18,6 @@ export function NeonTitle({ title, subtitle }: NeonTitleProps) {
 
   useEffect(() => {
     let timer: number | undefined;
-    let initialTimer: number | undefined;
 
     const triggerBurst = () => {
       setIsFlickering(true);
@@ -31,22 +30,22 @@ export function NeonTitle({ title, subtitle }: NeonTitleProps) {
     };
 
     const scheduleFlicker = () => {
-      const nextInMs = 2000 + Math.random() * 3000; // 2-5s повтор
+      const nextInMs = 2000 + Math.random() * 3000; // 2-5s repeat
       timer = window.setTimeout(() => {
         triggerBurst();
         scheduleFlicker();
       }, nextInMs) as unknown as number;
     };
 
-    // Гарантированный первый запуск через 2 секунды
-    initialTimer = window.setTimeout(() => {
+    // Guaranteed first burst after ~2 seconds
+    const first = window.setTimeout(() => {
       triggerBurst();
       scheduleFlicker();
     }, 2000) as unknown as number;
 
     return () => {
       if (timer) window.clearTimeout(timer);
-      if (initialTimer) window.clearTimeout(initialTimer);
+      if (first) window.clearTimeout(first);
     };
   }, []);
 

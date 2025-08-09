@@ -31,11 +31,13 @@ export function SparkProjectiles() {
   return null;
 }
 
+// Briefly add a glowing class to target
 function ignite(target: HTMLElement) {
   target.classList.add('ignite-active');
   window.setTimeout(() => target.classList.remove('ignite-active'), 800);
 }
 
+// Create and animate a single glowing dot projectile
 function launchDot(fromX: number, fromY: number, toX: number, toY: number, onFinish: () => void) {
   const dot = document.createElement('div');
   dot.style.position = 'fixed';
@@ -61,7 +63,7 @@ function launchDot(fromX: number, fromY: number, toX: number, toY: number, onFin
     { transform: `translate(${toX - 4}px, ${toY - 4}px)`, offset: 1, opacity: 0.7 },
   ];
 
-  const anim = dot.animate(keyframes as any, {
+  const anim = dot.animate(keyframes as Keyframe[], {
     duration,
     easing: 'ease-in-out',
     fill: 'forwards',
@@ -72,6 +74,7 @@ function launchDot(fromX: number, fromY: number, toX: number, toY: number, onFin
   };
 }
 
+// Fisher–Yates shuffle with strict typing (no destructuring swap to appease TS)
 function shuffle<T>(arr: T[]): T[] {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {

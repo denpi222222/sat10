@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 
 type Spark = {
   id: number;
@@ -36,6 +36,7 @@ export function SparkRain({ className = '', enabled = true }: SparkRainProps) {
     return { countMin: 20, countMax: 40, blur: 5, sizeMin: 1, sizeMax: 1.8, gravity: 440, fade: 1.25 };
   }, [intensity]);
 
+  // Mount/resize handling; keep canvas overlay non-intrusive on mobile
   useEffect(() => {
     setIsClient(true);
     // Determine device power score and set intensity
@@ -45,12 +46,14 @@ export function SparkRain({ className = '', enabled = true }: SparkRainProps) {
         const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent
         );
-        const cores = (navigator as any).hardwareConcurrency || 4;
-        const mem = (navigator as any).deviceMemory || 4;
+        type PerfNavigator = Navigator & { hardwareConcurrency?: number; deviceMemory?: number };
+        const nav = navigator as PerfNavigator;
+        const cores = nav.hardwareConcurrency ?? 4;
+        const mem = nav.deviceMemory ?? 4;
 
         // Quick RAF benchmark ~ 20 frames
         let frames = 0;
-        let start = performance.now();
+        const start = performance.now();
         await new Promise<void>(resolve => {
           const step = () => {
             frames += 1;
@@ -91,19 +94,8 @@ export function SparkRain({ className = '', enabled = true }: SparkRainProps) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  useEffect(() => {
-    if (!enabled) return;
-    const onBurst = (e: Event) => {
-      const { detail } = e as CustomEvent<{ x: number; y: number }>;
-      const x = detail?.x ?? window.innerWidth / 2;
-      const y = detail?.y ?? window.innerHeight * 0.2;
-      emitSparks(x, y);
-    };
-    window.addEventListener('crazycube:spark-burst', onBurst as EventListener);
-    return () => window.removeEventListener('crazycube:spark-burst', onBurst as EventListener);
-  }, [enabled]);
-
-  const emitSparks = (x: number, y: number) => {
+  // Emit sparks at given coordinates (memoized to satisfy hooks rules)
+  const emitSparks = useCallback((x: number, y: number) => {
     const count = config.countMin + Math.floor(Math.random() * (config.countMax - config.countMin));
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -119,7 +111,20 @@ export function SparkRain({ className = '', enabled = true }: SparkRainProps) {
         hue: 180 + Math.random() * 120, // cyan/blue/purple
       });
     }
-  };
+  }, [config]);
+
+  // Handle spark-burst events
+  useEffect(() => {
+    if (!enabled) return;
+    const onBurst = (e: Event) => {
+      const { detail } = e as CustomEvent<{ x: number; y: number }>;
+      const x = detail?.x ?? window.innerWidth / 2;
+      const y = detail?.y ?? window.innerHeight * 0.2;
+      emitSparks(x, y);
+    };
+    window.addEventListener('crazycube:spark-burst', onBurst as EventListener);
+    return () => window.removeEventListener('crazycube:spark-burst', onBurst as EventListener);
+  }, [enabled, emitSparks]);
 
   useEffect(() => {
     if (!isClient || !enabled) return;

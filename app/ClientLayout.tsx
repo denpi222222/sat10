@@ -34,6 +34,8 @@ function WalletEventHandler({ children }: { children: React.ReactNode }) {
 }
 
 // Initialize Web3Modal (always, using placeholder if no Project ID)
+// Purpose: ensure `useWeb3Modal` calls won't crash before init; avoids 403 config fetch by
+// falling back to local defaults when projectId is placeholder.
 if (typeof window !== 'undefined' && !(window as any).web3modal_initialized) {
   const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'crazycube-project-id';
   const isEnabled = process.env.NEXT_PUBLIC_WEB3_MODAL_ENABLED !== 'false';
@@ -61,6 +63,7 @@ if (typeof window !== 'undefined' && !(window as any).web3modal_initialized) {
 }
 
 // Patch console.error only once
+// Purpose: keep prod logs clean from noisy wallet/CSP warnings while preserving errors.
 let isConsoleErrorPatched = false;
 function patchConsoleError() {
   if (isConsoleErrorPatched) return;
@@ -107,6 +110,9 @@ export default function ClientLayout({
   const [mounted, setMounted] = useState(false);
 
   // Initialize on client side
+  // Responsibilities:
+  // 1) i18n lazy init; 2) optional Trusted Types policy; 3) create persistent global <audio>;
+  // 4) set up global error handling and minimal visibility handler.
   useEffect(() => {
     setMounted(true);
     patchConsoleError();
