@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { getGlobalAudioElement } from '@/lib/globalAudio';
 import { Button } from '@/components/ui/button';
 import { Music, VolumeX, Play, Pause } from 'lucide-react';
 import {
@@ -100,19 +101,37 @@ export const CompactMusicPlayer: React.FC = () => {
   const [currentTrack, setCurrentTrack] = useState(musicTracks[0]);
   const [volume, setVolume] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load saved state
+  // Verify track URL is reachable (same-origin)
+  const isUrlReachable = async (url: string): Promise<boolean> => {
+    try {
+      if (!url) return false;
+      const res = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  };
+
+  // Ensure global audio exists and load saved state
   useEffect(() => {
+    if (!audioRef.current) {
+      audioRef.current = getGlobalAudioElement();
+    }
     const savedTrack = safeGetLocalStorage('crazycube_current_track');
     const savedVolume = safeGetLocalStorage('crazycube_volume');
     const savedMuted = safeGetLocalStorage('crazycube_muted');
     
-    if (savedTrack) {
-      const track = musicTracks.find(t => t?.id === savedTrack);
-      if (track) setCurrentTrack(track);
-    }
+    (async () => {
+      if (savedTrack) {
+        const track = musicTracks.find(t => t?.id === savedTrack);
+        if (track && (await isUrlReachable(track.url))) {
+          setCurrentTrack(track);
+        }
+      }
+    })();
     
     if (savedVolume) {
       const vol = parseFloat(savedVolume);
@@ -143,7 +162,7 @@ export const CompactMusicPlayer: React.FC = () => {
 
   // Handle audio events
   useEffect(() => {
-    const audio = audioRef.current;
+    const audio = audioRef.current || getGlobalAudioElement();
     if (!audio) return;
 
     const handlePlay = () => setIsPlaying(true);
@@ -171,7 +190,7 @@ export const CompactMusicPlayer: React.FC = () => {
 
   // Update audio source and volume
   useEffect(() => {
-    const audio = audioRef.current;
+    const audio = audioRef.current || getGlobalAudioElement();
     if (!audio || !currentTrack) return;
 
     audio.src = currentTrack.url;
@@ -181,7 +200,7 @@ export const CompactMusicPlayer: React.FC = () => {
   }, [currentTrack, volume, isMuted]);
 
   const togglePlay = async () => {
-    const audio = audioRef.current;
+    const audio = (audioRef.current ||= getGlobalAudioElement());
     if (!audio) return;
 
     setIsLoading(true);
@@ -199,13 +218,18 @@ export const CompactMusicPlayer: React.FC = () => {
     }
   };
 
-  const selectTrack = (track: { id: string; name: string; url: string; theme: string } | null) => {
+  const selectTrack = async (track: { id: string; name: string; url: string; theme: string } | null) => {
     if (!track) return;
     
-    const audio = audioRef.current;
+    const audio = (audioRef.current ||= getGlobalAudioElement());
     if (!audio) return;
 
     const wasPlaying = !audio.paused;
+    // Probe URL; if not reachable, skip selection
+    if (!(await isUrlReachable(track.url))) {
+      console.error('Audio source not reachable:', track.url);
+      return;
+    }
     setCurrentTrack(track);
     
     if (wasPlaying) {
@@ -222,17 +246,7 @@ export const CompactMusicPlayer: React.FC = () => {
 
   return (
     <div className="flex items-center gap-2">
-      {/* Audio element with explicit MIME source */}
-      <audio
-        ref={audioRef}
-        preload="metadata"
-        onError={(error: unknown) => {
-          const errorMessage = error instanceof Error ? error.message : 'Audio error';
-          console.error('Audio error:', errorMessage);
-        }}
-      >
-        <source src={currentTrack?.url || ''} type="audio/mpeg" />
-      </audio>
+      {/* Global <audio> element создаётся в ClientLayout (lib/globalAudio) */}
 
       {/* Play/Pause button */}
       <Button

@@ -20,6 +20,8 @@ import { useWalletEvents } from '@/hooks/use-wallet-events';
 import { EthereumProviderSafe } from '@/components/ethereum-provider-safe';
 import { GlobalLanguageSwitcher } from '@/components/global-language-switcher';
 import EthereumGuard from '@/components/EthereumGuard';
+import { useRef } from 'react';
+import { getGlobalAudioElement } from '@/lib/globalAudio';
 
 // Create a client for React Query
 const queryClient = new QueryClient();
@@ -146,6 +148,8 @@ export default function ClientLayout({
 
     initI18n();
     initTrustedTypes();
+    // Ensure global audio element exists once on client
+    getGlobalAudioElement();
   }, []);
 
   return (
@@ -163,6 +167,10 @@ export default function ClientLayout({
                         <div className='relative flex min-h-screen flex-col'>
                           <GlobalLanguageSwitcher />
                           <SocialSidebar />
+                           {/* Ensure global audio exists */}
+                           <div id='__global_audio_mount' className='hidden'>
+                             {/* global <audio> is injected into document.body by getGlobalAudioElement() */}
+                           </div>
                           {children}
                           <BuildErrorDisplay />
                         </div>
