@@ -18,29 +18,35 @@ export function NeonTitle({ title, subtitle }: NeonTitleProps) {
 
   useEffect(() => {
     let timer: number | undefined;
+    let initialTimer: number | undefined;
+
+    const triggerBurst = () => {
+      setIsFlickering(true);
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const detail = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+        window.dispatchEvent(new CustomEvent('crazycube:spark-burst', { detail }));
+      }
+      window.setTimeout(() => setIsFlickering(false), 220 + Math.random() * 180);
+    };
+
     const scheduleFlicker = () => {
-      const nextInMs = 2000 + Math.random() * 2000; // 2-4s
+      const nextInMs = 2000 + Math.random() * 3000; // 2-5s повтор
       timer = window.setTimeout(() => {
-        setIsFlickering(true);
-        // Emit spark burst event with element center coordinates
-        if (containerRef.current) {
-          const rect = containerRef.current.getBoundingClientRect();
-          const detail = {
-            x: rect.left + rect.width / 2,
-            y: rect.top + rect.height / 2,
-          };
-          window.dispatchEvent(
-            new CustomEvent('crazycube:spark-burst', { detail })
-          );
-        }
-        // End flicker quickly for a realistic short-circuit effect
-        window.setTimeout(() => setIsFlickering(false), 220 + Math.random() * 180);
+        triggerBurst();
         scheduleFlicker();
       }, nextInMs) as unknown as number;
     };
-    scheduleFlicker();
+
+    // Гарантированный первый запуск через 2 секунды
+    initialTimer = window.setTimeout(() => {
+      triggerBurst();
+      scheduleFlicker();
+    }, 2000) as unknown as number;
+
     return () => {
       if (timer) window.clearTimeout(timer);
+      if (initialTimer) window.clearTimeout(initialTimer);
     };
   }, []);
 
