@@ -2,6 +2,7 @@
 
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useChainId, useBalance } from 'wagmi';
+import { usePathname } from 'next/navigation';
 import { useNetwork } from '@/hooks/use-network';
 import { apeChain } from '@/config/chains';
 import { Button } from '@/components/ui/button';
@@ -36,6 +37,7 @@ export function WalletConnectNoSSR() {
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [isSwapOpen, setIsSwapOpen] = useState(false);
   const [isBlinking, setIsBlinking] = useState(false);
+  const pathname = usePathname();
 
   const { data: craBal } = useBalance({
     address,
@@ -375,8 +377,8 @@ export function WalletConnectNoSSR() {
                 </DialogContent>
               </Dialog>
 
-              {/* Compact Music Player */}
-              <CompactMusicPlayer />
+              {/* Compact Music Player only on non-home pages */}
+              {pathname !== '/' && <CompactMusicPlayer />}
 
               {/* CRAA Buy Modal */}
               <Dialog open={isSwapOpen} onOpenChange={setIsSwapOpen}>

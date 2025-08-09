@@ -22,7 +22,6 @@ import { useAccount } from 'wagmi';
 import { usePerformanceContext } from '@/hooks/use-performance-context';
 import { useNetwork } from '@/hooks/use-network';
 import { NetworkSwitchProgress } from '@/components/NetworkSwitchProgress';
-import { CompactMusicPlayer } from '@/components/CompactMusicPlayer';
 
 
 const UserNFTsPreview = dynamic(
@@ -305,7 +304,6 @@ export default function HomePage() {
             {/* Wallet connection */}
             <div className='flex flex-col items-end gap-2 flex-shrink-0'>
               <WalletConnect />
-              <CompactMusicPlayer />
             </div>
           </div>
         </div>
