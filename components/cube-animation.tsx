@@ -315,6 +315,8 @@ export function CubeAnimation() {
       // Update the audio URL
       if (audioRef.current) {
         audioRef.current.src = track.url;
+        // Force browser to re-evaluate sources for reliability
+        audioRef.current.load();
 
         // If music was already playing, continue playback with the new track
         if (wasPlaying) {
@@ -327,6 +329,13 @@ export function CubeAnimation() {
     },
     [safePauseAudio, safePlayAudio]
   );
+
+  // Reload audio when track changes (covers initial set and non-manual src updates)
+  useEffect(() => {
+    if (audioRef.current && currentTrack) {
+      audioRef.current.load();
+    }
+  }, [currentTrack]);
 
   // Function for cycling through music waiting phrases
   const startWaitingForMusicPhrasesCycle = useCallback(() => {
@@ -588,27 +597,16 @@ export function CubeAnimation() {
       {!AUDIO_DISABLED && (
         <audio
           ref={audioRef}
-          src={currentTrack?.url || musicTracks[0]?.url || ''}
           loop
-          preload='auto'
+          preload='metadata'
           onError={(error: unknown) => {
             const errorMessage = error instanceof Error ? error.message : 'Audio error';
             console.error('Audio error:', errorMessage);
-            const fallbackUrl = '';
-            // Switch to fallback only if we're not already using it to avoid endless loops
-            if (audioRef.current && audioRef.current.src !== fallbackUrl) {
-              audioRef.current.src = fallbackUrl;
-              // Attempt to play the fallback silently
-              audioRef.current
-                .play()
-                .then(() => {})
-                .catch((playError: unknown) => {
-                  const playErrorMessage = playError instanceof Error ? playError.message : 'Play error';
-                  console.error('Play error:', playErrorMessage);
-                });
-            }
           }}
-        />
+        >
+          <source src={currentTrack?.url || musicTracks[0]?.url || ''} type='audio/mpeg' />
+          <source src={currentTrack?.url || musicTracks[0]?.url || ''} type='audio/mp3' />
+        </audio>
       )}
 
       {/* Button for selecting and playing music */}

@@ -175,6 +175,8 @@ export const CompactMusicPlayer: React.FC = () => {
     if (!audio || !currentTrack) return;
 
     audio.src = currentTrack.url;
+    // Ensure browser re-evaluates media type
+    audio.load();
     audio.volume = isMuted ? 0 : volume;
   }, [currentTrack, volume, isMuted]);
 
@@ -220,7 +222,7 @@ export const CompactMusicPlayer: React.FC = () => {
 
   return (
     <div className="flex items-center gap-2">
-      {/* Audio element */}
+      {/* Audio element with explicit MIME source */}
       <audio
         ref={audioRef}
         preload="metadata"
@@ -228,7 +230,9 @@ export const CompactMusicPlayer: React.FC = () => {
           const errorMessage = error instanceof Error ? error.message : 'Audio error';
           console.error('Audio error:', errorMessage);
         }}
-      />
+      >
+        <source src={currentTrack?.url || ''} type="audio/mpeg" />
+      </audio>
 
       {/* Play/Pause button */}
       <Button
