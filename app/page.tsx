@@ -184,8 +184,8 @@ export default function HomePage() {
         overflow: 'visible',
       }}
     >
-      {/* Global spark rain overlay */}
-      <SparkRain />
+      {/* Global spark rain overlay (disabled on mobile to avoid layout shifts) */}
+      {!isMobile && <SparkRain />}
       {/* Adding particle effect - reduced quantity */}
       {shouldShowParticles && !isMobile && (
         <ParticleEffect

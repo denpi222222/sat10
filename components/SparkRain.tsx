@@ -116,7 +116,16 @@ export function SparkRain({ className = '', enabled = true }: SparkRainProps) {
   }, [isClient, enabled]);
 
   if (!isClient || !enabled) return null;
-  return <canvas ref={canvasRef} className={`pointer-events-none fixed inset-0 z-[5] ${className}`} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`pointer-events-none fixed inset-0 z-[5] block w-screen h-screen ${className}`}
+      style={{
+        // Ensure overlay never affects layout on mobile browsers
+        contain: 'strict',
+      }}
+    />
+  );
 }
 
 

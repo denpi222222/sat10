@@ -49,34 +49,34 @@ export function NeonTitle({ title, subtitle }: NeonTitleProps) {
       <h1
         className={
           'mx-auto uppercase font-extrabold tracking-[0.2em] ' +
-          'text-3xl md:text-5xl lg:text-7xl crazycube-neon-title ' +
+          'text-3xl md:text-6xl lg:text-8xl crazycube-neon-title ' +
           (isFlickering ? ' crazycube-neon-flicker' : '')
         }
       >
         {title}
       </h1>
       {subtitle ? (
-        <div className="mt-1 text-[11px] md:text-base lg:text-lg crazycube-neon-subtitle">
+        <div className="mt-2 text-[12px] md:text-lg lg:text-xl crazycube-neon-subtitle">
           {subtitle}
         </div>
       ) : null}
 
       <style jsx>{`
         .crazycube-neon-title {
-          color: #a6e8ff;
+          color: #c8f3ff;
           text-shadow:
-            0 0 8px rgba(34, 211, 238, 0.9),
-            0 0 18px rgba(14, 165, 233, 0.8),
-            0 0 42px rgba(59, 130, 246, 0.7),
-            0 0 82px rgba(14, 165, 233, 0.6);
-          filter: saturate(1.2) brightness(1.06);
+            0 0 10px rgba(34, 211, 238, 1),
+            0 0 24px rgba(14, 165, 233, 0.95),
+            0 0 60px rgba(59, 130, 246, 0.9),
+            0 0 120px rgba(14, 165, 233, 0.85);
+          filter: saturate(1.35) brightness(1.12);
           transition: filter 120ms ease, transform 120ms ease, letter-spacing 120ms ease;
         }
         .crazycube-neon-subtitle {
-          color: rgba(186, 230, 253, 0.9);
+          color: rgba(186, 230, 253, 1);
           text-shadow:
-            0 0 6px rgba(34, 211, 238, 0.7),
-            0 0 14px rgba(14, 165, 233, 0.7);
+            0 0 8px rgba(34, 211, 238, 0.8),
+            0 0 18px rgba(14, 165, 233, 0.75);
         }
         .crazycube-neon-flicker {
           animation: crazycubeFlicker 0.28s linear 0s 1;
