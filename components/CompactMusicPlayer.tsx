@@ -90,7 +90,7 @@ const musicTracks = [
   {
     id: 'track4',
     name: 'Retro Wave',
-    url: '/myzzzz/456%20(1).mp3',
+    url: '/myzzzz/456-1.mp3',
     theme: 'dance',
   },
 ].map(sanitizeTrackData).filter(Boolean);
