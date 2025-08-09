@@ -38,6 +38,11 @@ if (typeof window !== 'undefined') {
   // Initialize the multi-tier system with wagmi client
   initWagmiClient(publicClient);
 
+  // Detect problematic browsers (e.g., Yandex) where multiple extensions may clash
+  const ua = (typeof navigator !== 'undefined' ? navigator.userAgent : '').toLowerCase();
+  const isYandex = ua.includes('yabrowser') || ua.includes('yandex');
+  const enableInjected = (process.env.NEXT_PUBLIC_ENABLE_INJECTED ?? 'false') !== 'false' && !isYandex;
+
   // Define configuration for Wagmi with fallback transports
   config = createConfig({
     chains: [apeChain],
@@ -66,13 +71,7 @@ if (typeof window !== 'undefined') {
     // Disable persistent storage to prevent auto-reconnect across sessions
     storage: null,
     connectors: [
-      metaMask({
-        dappMetadata: {
-          name: 'CrazyCube',
-          url: window.location.origin,
-          iconUrl: 'https://crazycube.xyz/favicon.ico',
-        },
-      }),
+      // WalletConnect first (works across browsers and mobile)
       walletConnect({
         projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
         metadata: {
@@ -83,9 +82,19 @@ if (typeof window !== 'undefined') {
         },
         showQrModal: true,
       }),
-      injected({
-        shimDisconnect: true,
-      }),
+      // Enable injected connectors only on safe browsers
+      ...(enableInjected
+        ? [
+            metaMask({
+              dappMetadata: {
+                name: 'CrazyCube',
+                url: window.location.origin,
+                iconUrl: 'https://crazycube.xyz/favicon.ico',
+              },
+            }),
+            injected({ shimDisconnect: true }),
+          ]
+        : []),
     ],
     ssr: false,
   });
