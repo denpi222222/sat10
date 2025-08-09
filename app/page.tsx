@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { TabNavigation } from '@/components/tab-navigation';
 import { NeonTitle } from '@/components/NeonTitle';
 import { SparkRain } from '@/components/SparkRain';
+import { ReactiveAura } from '@/components/ReactiveAura';
 import { WalletConnectNoSSR as WalletConnect } from '@/components/web3/wallet-connect.no-ssr';
 
 import { useAccount } from 'wagmi';
@@ -327,6 +328,8 @@ export default function HomePage() {
             })}
             className='crypto-card relative overflow-hidden bg-gradient-to-br from-pink-500/80 via-fuchsia-500/70 to-rose-400/80 p-4 md:p-6 flex flex-col justify-between'
           >
+            {/* Neon reactive aura for Breed */}
+            <ReactiveAura tint='fuchsia' intensity={1.1} />
             {/* Animated flying red hearts */}
             {(
               <div className='absolute inset-0 overflow-hidden pointer-events-none'>
@@ -361,11 +364,11 @@ export default function HomePage() {
                 className='w-8 h-8 text-pink-400 mr-3'
                 fill='currentColor'
               />
-              <h2 className='heading-3 neon-text'>
+              <h2 className='heading-3 crypto-title text-gradient-crypto holo-underline glitch-soft'>
                 {t('sections.breed.title', 'Breed NFTs (Cube Love!)')}
               </h2>
             </div>
-            <p className='body-text text-pink-200 mb-6 relative z-10 flex-1'>
+            <p className='body-text crypto-body mb-6 relative z-10 flex-1'>
               {t(
                 'sections.breed.description',
                 'Combine two NFTs to resurrect one from the graveyard! Love is in the air! 💕'
@@ -396,16 +399,18 @@ export default function HomePage() {
             })}
             className='crypto-card relative overflow-hidden bg-gradient-to-br from-orange-900/90 to-red-900/80 p-4 md:p-6 flex flex-col justify-between'
           >
+            {/* Neon reactive aura for Burn */}
+            <ReactiveAura tint='orange' intensity={1.15} />
             {/* Add FireAnimation component with reduced intensity */}
             {<FireAnimation intensity={animationIntensity} />}
 
             <div className='flex items-center mb-4 relative z-10'>
               <Flame className='w-8 h-8 text-orange-400 mr-3' />
-              <h2 className='heading-3 neon-text'>
+              <h2 className='heading-3 crypto-title text-gradient-crypto holo-underline glitch-soft'>
                 {t('sections.burn.title', 'Burn NFT (Roast the Cube!)')}
               </h2>
             </div>
-            <p className='body-text text-orange-200 mb-6 relative z-10 flex-1'>
+            <p className='body-text crypto-body mb-6 relative z-10 flex-1'>
               {t(
                 'sections.burn.description',
                 'Burn NFT and get CRA tokens! Epic scene of a fiery grill with NFTs flying in screaming: "Tell my mom I love her!"'
@@ -427,16 +432,18 @@ export default function HomePage() {
             })}
             className='crypto-card relative overflow-hidden bg-gradient-to-br from-amber-900/90 to-yellow-900/80 p-4 md:p-6 flex flex-col justify-between'
           >
+            {/* Neon reactive aura for Claim */}
+            <ReactiveAura tint='amber' intensity={1.1} />
             {/* Gold coins animation */}
             {<CoinsAnimation />}
 
             <div className='flex items-center mb-4 relative z-10'>
               <Coins className='w-8 h-8 text-yellow-400 mr-3' />
-              <h2 className='heading-3 neon-text'>
+              <h2 className='heading-3 crypto-title text-gradient-crypto holo-underline glitch-soft'>
                 {t('sections.claim.title', "Claim Rewards (Where's my CRA?)")}
               </h2>
             </div>
-            <p className='body-text text-yellow-200 mb-6 relative z-10 flex-1'>
+            <p className='body-text crypto-body mb-6 relative z-10 flex-1'>
               {t(
                 'sections.claim.description',
                 'A cube with huge sad eyes shouts: "Claim me and get your CRA!"'
@@ -457,16 +464,18 @@ export default function HomePage() {
             })}
             className='crypto-card relative overflow-hidden bg-gradient-to-br from-cyan-900/90 to-sky-900/80 p-4 md:p-6 flex flex-col justify-between'
           >
+            {/* Neon reactive aura for Ping */}
+            <ReactiveAura tint='sky' intensity={1.05} />
             {/* Blue coins animation for ping - always show */}
             <CoinsAnimation />
 
             <div className='flex items-center mb-4 relative z-10'>
               <SatelliteDish className='w-8 h-8 text-cyan-400 mr-3' />
-              <h2 className='heading-3 neon-text'>
+              <h2 className='heading-3 crypto-title text-gradient-crypto holo-underline glitch-soft'>
                 {t('sections.ping.title', 'Ping Cubes (Keep them Alive)')}
               </h2>
             </div>
-            <p className='body-text text-cyan-200 mb-6 relative z-10 flex-1'>
+            <p className='body-text crypto-body mb-6 relative z-10 flex-1'>
               {t(
                 'sections.ping.description',
                 "Send a heartbeat to your cubes so they don't drift into the void."
@@ -488,13 +497,15 @@ export default function HomePage() {
             })}
             className='crypto-card relative overflow-hidden bg-gradient-to-br from-gray-900/90 to-slate-900/80 p-4 md:p-6 flex flex-col justify-between'
           >
+            {/* Subtle aura for Graveyard */}
+            <ReactiveAura tint='purple' intensity={0.6} />
             <div className='flex items-center mb-4 relative z-10'>
               <Skull className='w-8 h-8 text-red-400 mr-3' />
-              <h2 className='heading-3 neon-text'>
+              <h2 className='heading-3 crypto-title text-gradient-crypto holo-underline glitch-soft'>
                 {t('sections.graveyard.title', 'Graveyard')}
               </h2>
             </div>
-            <p className='body-text text-gray-300 mb-6 relative z-10 flex-1'>
+            <p className='body-text crypto-body mb-6 relative z-10 flex-1'>
               {t(
                 'sections.graveyard.description',
                 'See your burned cubes, mourn them, and claim their CRA rewards.'
@@ -543,7 +554,9 @@ export default function HomePage() {
             })}
             className='crypto-card relative overflow-hidden bg-gradient-to-br from-emerald-900/90 to-teal-900/80 p-4 md:p-6 flex flex-col justify-between'
           >
-            <p className='body-text text-teal-200 mb-4 relative z-10 flex-1'>
+            {/* Neon reactive aura for Game */}
+            <ReactiveAura tint='emerald' intensity={0.9} />
+            <p className='body-text crypto-body mb-4 relative z-10 flex-1'>
               {t(
                 'sections.game.description',
                 'Interactive Minecraft-style game with an open crazy world, with crazy, amazing physics and gameplay! COMING SOON!'
@@ -608,7 +621,9 @@ export default function HomePage() {
             })}
             className='crypto-card relative overflow-hidden bg-gradient-to-br from-cyan-900/90 to-blue-900/80 p-4 md:p-6 flex flex-col justify-between'
           >
-            <p className='body-text text-cyan-200 mb-4 relative z-10 flex-1'>
+            {/* Neon reactive aura for Bridge */}
+            <ReactiveAura tint='cyan' intensity={1.1} />
+            <p className='body-text crypto-body mb-4 relative z-10 flex-1'>
               {t(
                 'sections.bridge.description',
                 'Transfer your NFTs between networks quickly and safely! Bridge for your cubes: expand your possibilities and participate in new worlds.'

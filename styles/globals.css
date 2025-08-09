@@ -822,3 +822,63 @@ html.telegram body {
     0 0 64px #00eaff;
   animation: neonFlicker 2s infinite alternate;
 }
+
+/* Crypto-styled text utilities */
+.text-gradient-crypto {
+  background-image: linear-gradient(90deg, #22d3ee, #3b82f6 35%, #a78bfa 70%, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer-sweep 8s linear infinite;
+}
+
+.crypto-title {
+  letter-spacing: 0.12em;
+  text-shadow:
+    0 0 6px rgba(59, 130, 246, 0.55),
+    0 0 14px rgba(34, 211, 238, 0.45),
+    0 0 28px rgba(167, 139, 250, 0.35);
+  filter: saturate(1.25) brightness(1.05);
+}
+
+.crypto-title.glitch-soft {
+  animation: crypto-glitch 3.6s ease-in-out infinite;
+}
+
+.crypto-body {
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  color: rgba(226, 242, 255, 0.92);
+  text-shadow: 0 0 6px rgba(14, 165, 233, 0.15);
+}
+
+.holo-underline {
+  position: relative;
+}
+.holo-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.7), rgba(16, 185, 129, 0.7), rgba(14, 165, 233, 0.7), transparent);
+  background-size: 200% 100%;
+  filter: blur(0.5px);
+  animation: shimmer-sweep 5.5s linear infinite;
+}
+
+@keyframes shimmer-sweep {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes crypto-glitch {
+  0% { transform: translateX(0); filter: hue-rotate(0deg) brightness(1); }
+  2% { transform: translateX(0.6px); filter: hue-rotate(8deg) brightness(1.15); }
+  4% { transform: translateX(-0.6px); filter: hue-rotate(-6deg) brightness(1.05); }
+  6% { transform: translateX(0.3px); filter: hue-rotate(4deg) brightness(1.1); }
+  8% { transform: translateX(0); filter: hue-rotate(0deg) brightness(1); }
+  100% { transform: translateX(0); filter: hue-rotate(0deg) brightness(1); }
+}
