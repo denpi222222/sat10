@@ -282,9 +282,9 @@ export default function HomePage() {
         {/* Hero section with 3D animation */}
         <div className='flex flex-col items-center justify-center mb-24'>
           <div
-            className={`w-full relative ${isMobile ? 'h-[220px]' : 'h-[400px]'}`}
+            className={`w-full relative ${isMobile ? 'h-[260px]' : 'h-[560px]'}`}
           >
-            <CubeAnimation />
+            <CubeAnimation desktopScale={1.4} />
           </div>
         </div>
 

@@ -152,7 +152,11 @@ const cubeImages = [
   '/images/cube8.png', // 8: Orange cube with white hat
 ];
 
-export function CubeAnimation() {
+type CubeAnimationProps = {
+  desktopScale?: number; // scale factor for desktop sizes
+};
+
+export function CubeAnimation({ desktopScale = 1 }: CubeAnimationProps) {
   const [isClient, setIsClient] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [cubesLeft, setCubesLeft] = useState<boolean[]>([
@@ -581,11 +585,8 @@ export function CubeAnimation() {
   // Force re-render when language changes
   const languageKey = i18n.language;
 
-  // Determine cube size - original sizes
-  let cubeSize = 450; // Original desktop size
-  if (isMobile) {
-    cubeSize = 120; // Original mobile size
-  }
+  // Determine cube size - responsive + desktop scaling
+  let cubeSize = isMobile ? 120 : Math.round(450 * Math.max(0.5, desktopScale));
 
   return (
     <motion.div
