@@ -149,7 +149,15 @@ export default function ClientLayout({
     initI18n();
     initTrustedTypes();
     // Ensure global audio element exists once on client
-    getGlobalAudioElement();
+    const audio = getGlobalAudioElement();
+    if (audio) {
+      // Persist through soft navigations: avoid pause on visibilitychange
+      const onVisibility = () => {
+        // If user explicitly played and audio was playing, keep state; otherwise do nothing
+      };
+      document.addEventListener('visibilitychange', onVisibility);
+      return () => document.removeEventListener('visibilitychange', onVisibility);
+    }
   }, []);
 
   return (

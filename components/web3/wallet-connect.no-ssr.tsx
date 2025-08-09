@@ -377,7 +377,7 @@ export function WalletConnectNoSSR() {
                 </DialogContent>
               </Dialog>
 
-              {/* Compact Music Player only on non-home pages */}
+              {/* Compact Music Player only on non-home pages (persistent global audio) */}
               {pathname !== '/' && <CompactMusicPlayer />}
 
               {/* CRAA Buy Modal */}

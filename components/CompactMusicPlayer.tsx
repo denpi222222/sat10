@@ -188,14 +188,23 @@ export const CompactMusicPlayer: React.FC = () => {
     };
   }, [currentTrack]);
 
-  // Update audio source and volume
+  // Update audio source and volume without interrupting playback on navigation
   useEffect(() => {
     const audio = audioRef.current || getGlobalAudioElement();
     if (!audio || !currentTrack) return;
 
-    audio.src = currentTrack.url;
-    // Ensure browser re-evaluates media type
-    audio.load();
+    // Compare current resolved pathname to avoid unnecessary load()
+    let currentPath = '';
+    try {
+      currentPath = new URL(audio.currentSrc).pathname;
+    } catch {
+      currentPath = '';
+    }
+    const nextPath = currentTrack.url;
+    if (currentPath !== nextPath) {
+      audio.src = currentTrack.url;
+      audio.load();
+    }
     audio.volume = isMuted ? 0 : volume;
   }, [currentTrack, volume, isMuted]);
 

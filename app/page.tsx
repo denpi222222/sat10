@@ -12,10 +12,12 @@ import {
   Skull,
 } from 'lucide-react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 
 import { useTranslation } from 'react-i18next';
 import { TabNavigation } from '@/components/tab-navigation';
-import dynamic from 'next/dynamic';
+import { NeonTitle } from '@/components/NeonTitle';
+import { SparkRain } from '@/components/SparkRain';
 import { WalletConnectNoSSR as WalletConnect } from '@/components/web3/wallet-connect.no-ssr';
 
 import { useAccount } from 'wagmi';
@@ -181,6 +183,8 @@ export default function HomePage() {
         overflow: 'visible',
       }}
     >
+      {/* Global spark rain overlay */}
+      <SparkRain />
       {/* Adding particle effect - reduced quantity */}
       {shouldShowParticles && !isMobile && (
         <ParticleEffect
@@ -252,52 +256,10 @@ export default function HomePage() {
                     fillOpacity='0.32'
                   />
                 </svg>
-                {/* Neon animated logo text */}
-                <h1 className='crazycube-neon-logo relative z-10 text-2xl md:text-4xl lg:text-6xl font-extrabold uppercase tracking-widest text-center mx-auto'>
-                  {t('home.title', 'CrazyCube')}
-                </h1>
-                <span
-                  className='crazycube-neon-subtitle block text-[11px] md:text-base lg:text-lg text-blue-100/90 text-center mt-1 tracking-wide font-medium'
-                  style={{ textShadow: '0 0 8px #1e90ff, 0 0 16px #3ab0ff' }}
-                >
-                  {t('home.subtitle', 'Where cubes cry and joke!')}
-                </span>
-                <style jsx>{`
-                  .crazycube-neon-logo {
-                    color: #1e90ff;
-                    text-shadow:
-                      0 0 10px #1e90ff,
-                      0 0 28px #3ab0ff,
-                      0 0 48px #3ab0ff,
-                      0 0 100px #3ab0ff;
-                    animation: crazycubeNeonPulse 2.8s infinite alternate;
-                    letter-spacing: 0.18em;
-                  }
-                  @keyframes crazycubeNeonPulse {
-                    0%,
-                    100% {
-                      text-shadow:
-                        0 0 10px #1e90ff,
-                        0 0 28px #3ab0ff,
-                        0 0 48px #3ab0ff,
-                        0 0 100px #3ab0ff;
-                      filter: brightness(1.08) saturate(1.2);
-                    }
-                    50% {
-                      text-shadow:
-                        0 0 24px #1e90ff,
-                        0 0 48px #3ab0ff,
-                        0 0 100px #3ab0ff,
-                        0 0 180px #3ab0ff;
-                      filter: brightness(1.22) saturate(1.5);
-                    }
-                  }
-                  .crazycube-neon-subtitle {
-                    text-shadow:
-                      0 0 8px #1e90ff,
-                      0 0 16px #3ab0ff;
-                  }
-                `}</style>
+                <NeonTitle
+                  title={t('home.title', 'CrazyCube')}
+                  subtitle={t('home.subtitle', 'Where cubes cry and joke!')}
+                />
               </div>
             </div>
 
