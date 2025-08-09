@@ -463,6 +463,18 @@
   }
 }
 
+/* Ignite effect for CTA buttons */
+.ignite-active {
+  position: relative;
+  box-shadow:
+    0 0 16px rgba(56, 189, 248, 0.6),
+    0 0 32px rgba(59, 130, 246, 0.5),
+    inset 0 0 18px rgba(14, 165, 233, 0.4);
+  transform: translateZ(0) scale(1.02);
+  transition: box-shadow 250ms ease, transform 250ms ease;
+}
+
+
 /* Add optimizations for reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   * {

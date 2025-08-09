@@ -22,6 +22,7 @@ import { GlobalLanguageSwitcher } from '@/components/global-language-switcher';
 import EthereumGuard from '@/components/EthereumGuard';
 import { useRef } from 'react';
 import { getGlobalAudioElement } from '@/lib/globalAudio';
+import { SparkProjectiles } from '@/components/SparkProjectiles';
 
 // Create a client for React Query
 const queryClient = new QueryClient();
@@ -182,6 +183,7 @@ export default function ClientLayout({
                         <div className='relative flex min-h-screen flex-col'>
                           <GlobalLanguageSwitcher />
                           <SocialSidebar />
+                           <SparkProjectiles />
                            {/* Ensure global audio exists */}
                            <div id='__global_audio_mount' className='hidden'>
                              {/* global <audio> is injected into document.body by getGlobalAudioElement() */}
