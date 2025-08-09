@@ -276,6 +276,7 @@ export default function HomePage() {
       <main className='relative z-10 container mx-auto px-4 py-16'>
         {/* Tab navigation */}
         <div className='mb-16'>
+          <div data-ignite-target className='hidden' />
           <TabNavigation />
         </div>
 
@@ -374,10 +375,12 @@ export default function HomePage() {
                 'Combine two NFTs to resurrect one from the graveyard! Love is in the air! 💕'
               )}
             </p>
+            <div data-ignite-target>
             {renderActionButton(
               '/breed',
               t('sections.breed.button', 'Breed NFTs')
             )}
+            </div>
 
             {/* Pulsating pink glow */}
             <motion.div
@@ -416,11 +419,13 @@ export default function HomePage() {
                 'Burn NFT and get CRA tokens! Epic scene of a fiery grill with NFTs flying in screaming: "Tell my mom I love her!"'
               )}
             </p>
+            <div data-ignite-target>
             {renderActionButton(
               '/burn',
               t('sections.burn.button', 'Burn NFT'),
               <div className='btn-flames mr-2' />
             )}
+            </div>
           </motion.div>
 
           {/* Claim Section - GOLD - OPTIMIZED */}
@@ -449,10 +454,12 @@ export default function HomePage() {
                 'A cube with huge sad eyes shouts: "Claim me and get your CRA!"'
               )}
             </p>
+            <div data-ignite-target>
             {renderActionButton(
               '/claim',
               t('sections.claim.button', 'Claim')
             )}
+            </div>
           </motion.div>
 
           {/* Ping Section */}
@@ -481,11 +488,13 @@ export default function HomePage() {
                 "Send a heartbeat to your cubes so they don't drift into the void."
               )}
             </p>
+            <div data-ignite-target>
             {renderActionButton(
               '/ping',
               t('sections.ping.button', 'Ping Now'),
               <SatelliteDish className='w-4 h-4 mr-2' />
             )}
+            </div>
           </motion.div>
 
           {/* Graveyard Section */}
@@ -511,11 +520,13 @@ export default function HomePage() {
                 'See your burned cubes, mourn them, and claim their CRA rewards.'
               )}
             </p>
+            <div data-ignite-target>
             {renderActionButton(
               '/graveyard',
               t('sections.graveyard.button', 'Enter Graveyard'),
               <Skull className='w-5 h-5 mr-2' />
             )}
+            </div>
 
             {/* Floating skulls */}
             <div className='absolute inset-0 overflow-hidden pointer-events-none'>
@@ -591,6 +602,7 @@ export default function HomePage() {
               ))}
             </div>
             <div className='mt-auto'>
+              <div data-ignite-target>
               {renderActionButton(
                 '/game',
                 t('sections.game.button', 'Play Game'),
@@ -609,6 +621,7 @@ export default function HomePage() {
                   </svg>
                 </span>
               )}
+              </div>
             </div>
           </motion.div>
 
@@ -630,6 +643,7 @@ export default function HomePage() {
               )}
             </p>
             <div className='mt-auto'>
+              <div data-ignite-target>
               {renderActionButton(
                 '/bridge',
                 t('sections.bridge.button', 'Bridge'),
@@ -655,6 +669,7 @@ export default function HomePage() {
                   />
                 </span>
               )}
+              </div>
             </div>
           </motion.div>
         </div>
