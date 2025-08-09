@@ -15,10 +15,24 @@ const keyStats = new Map<
 >();
 
 // Tier 1: Premium Alchemy endpoints (fastest, rate limited)
-// Use ONLY environment variable (single key). No hardcoded fallbacks for security.
+// Use ONLY environment variables (rotation across up to 5 keys). No hardcoded fallbacks.
 const ALCHEMY_KEYS = [
-  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_1 || process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '',
-].filter((key): key is string => typeof key === 'string' && key.length > 0);
+  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_1,
+  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_2,
+  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_3,
+  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_4,
+  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_5,
+  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY, // optional single-key name
+  // Accept optional typo prefix just in case the env was added that way in the dashboard
+  (process.env as any).XT_PUBLIC_ALCHEMY_API_KEY_1,
+  (process.env as any).XT_PUBLIC_ALCHEMY_API_KEY_2,
+  (process.env as any).XT_PUBLIC_ALCHEMY_API_KEY_3,
+  (process.env as any).XT_PUBLIC_ALCHEMY_API_KEY_4,
+  (process.env as any).XT_PUBLIC_ALCHEMY_API_KEY_5,
+]
+  .filter((key): key is string => typeof key === 'string' && key.length > 0)
+  // Ensure uniqueness / stable order
+  .filter((k, i, arr) => arr.indexOf(k) === i);
 
 // Tier 2: Public RPC endpoints (slower but reliable)
 const PUBLIC_RPC_ENDPOINTS = [
