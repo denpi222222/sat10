@@ -13,30 +13,74 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
   const [isManuallyClosed, setIsManuallyClosed] = useState(false);
   const { isMobile } = useMobile();
   const { t } = useTranslation();
+  const [bottomOffset, setBottomOffset] = useState<string>('80px');
+  const lastScrollYRef = React.useRef<number>(0);
+  const autoHideTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const touchStartYRef = React.useRef<number | null>(null);
 
   // Track page scrolling - MOBILE WITH AUTO-HIDE
   useEffect(() => {
-    let hideTimer: NodeJS.Timeout;
     let showTimer: NodeJS.Timeout;
 
     const showIcons = () => {
       if (isManuallyClosed) return; // Don't show if manually closed
       
       setIsVisible(true);
-      
-      // Auto-hide on mobile after 1 hour
+      // Reset auto-hide timer for mobile (15s)
       if (isMobile) {
-        hideTimer = setTimeout(() => {
-          setIsVisible(false);
-        }, 60 * 60 * 1000); // 1 hour
+        if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
+        autoHideTimerRef.current = setTimeout(() => setIsVisible(false), 15000);
       }
     };
 
     if (isMobile) {
-      // Mobile: show after 5 seconds, then auto-hide after 1 hour
+      // Mobile: show after 2 seconds
       showTimer = setTimeout(() => {
         showIcons();
-      }, 5000); // 5 seconds delay
+      }, 2000);
+      
+      // Listen scroll to toggle visibility (show on scroll up, hide on scroll down)
+      lastScrollYRef.current = window.scrollY;
+      const onScroll = () => {
+        const current = window.scrollY;
+        const delta = current - lastScrollYRef.current;
+        lastScrollYRef.current = current;
+        if (Math.abs(delta) < 8) return;
+        if (delta < 0) {
+          showIcons();
+        } else {
+          setIsVisible(false);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      
+      // Swipe-down to hide
+      const onTouchStart = (e: TouchEvent) => {
+        touchStartYRef.current = e.touches[0]?.clientY ?? null;
+      };
+      const onTouchMove = (e: TouchEvent) => {
+        if (touchStartYRef.current === null) return;
+        const dy = e.touches[0].clientY - touchStartYRef.current;
+        if (dy > 24) {
+          setIsVisible(false);
+          touchStartYRef.current = null;
+        }
+      };
+      window.addEventListener('touchstart', onTouchStart, { passive: true });
+      window.addEventListener('touchmove', onTouchMove, { passive: true });
+      
+      // Safe bottom offset (avoid bottom nav) + iOS safe area
+      try {
+        setBottomOffset('calc(76px + env(safe-area-inset-bottom))');
+      } catch {
+        setBottomOffset('76px');
+      }
+      
+      return () => {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('touchstart', onTouchStart as any);
+        window.removeEventListener('touchmove', onTouchMove as any);
+      };
     } else {
       // Desktop: show immediately and stay visible
       setIsVisible(true);
@@ -44,11 +88,11 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
 
     // Clean up timers when component unmounts
     return () => {
-      if (hideTimer) {
-        clearTimeout(hideTimer);
-      }
       if (showTimer) {
         clearTimeout(showTimer);
+      }
+      if (autoHideTimerRef.current) {
+        clearTimeout(autoHideTimerRef.current);
       }
     };
   }, [isMobile, isManuallyClosed]);
@@ -65,28 +109,30 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
     return;
   }, [isManuallyClosed, isMobile]);
 
-  // Define styles based on device - SOCIAL ICONS ON TOP FOR MOBILE
+  // Define styles based on device
   const sidebarClass = isMobile
-    ? 'fixed top-20 left-0 right-0 z-50 flex-row justify-center'
+    ? 'fixed left-0 right-0 z-50 flex-row justify-center pointer-events-none'
     : 'fixed top-1/2 -translate-y-1/2 left-0 z-50 flex-col';
 
   return (
     <motion.div
-      initial={isMobile ? { y: -100 } : { x: -100 }}
+      initial={isMobile ? { y: 120, opacity: 0 } : { x: -100 }}
       animate={
         isVisible
           ? isMobile
-            ? { y: 0 }
+            ? { y: 0, opacity: 1 }
             : { x: 0 }
           : isMobile
-            ? { y: -100 }
+            ? { y: 120, opacity: 0 }
             : { x: -100 }
       }
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className={`${sidebarClass} flex items-center gap-1 bg-gradient-to-r from-slate-900/90 to-blue-900/90 backdrop-blur-md border border-cyan-500/20 shadow-lg shadow-cyan-500/10 ${
-        isMobile ? 'mx-auto max-w-[140px] p-2 rounded-lg relative' : 'max-w-[300px] p-1 rounded-full'
-      }`}
+      className={`${sidebarClass}`}
+      style={isMobile ? { bottom: bottomOffset } : undefined}
     >
+      <div className={`flex items-center gap-2 bg-gradient-to-r from-slate-900/90 to-blue-900/90 backdrop-blur-md border border-cyan-500/20 shadow-lg shadow-cyan-500/10 ${
+        isMobile ? 'mx-auto max-w-[220px] px-2 py-2 rounded-full relative pointer-events-auto' : 'max-w-[300px] p-1 rounded-full'
+      }`}>
       {/* Close button for mobile */}
       {isMobile && isVisible && (
         <button
@@ -107,14 +153,8 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
         rel='noopener noreferrer'
         className='relative group'
       >
-        <motion.div
-          whileHover={{ scale: 1.2, rotate: 5 }}
-          whileTap={{ scale: 0.9 }}
-          className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-cyan-500/30 shadow-md shadow-cyan-500/10 ${
-            isMobile ? 'p-2' : 'p-4'
-          }`}
-        >
-          <Twitter className={`text-cyan-300 ${isMobile ? 'w-4 h-4' : 'w-8 h-8'}`} />
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-cyan-500/30 shadow-md shadow-cyan-500/10 ${isMobile ? 'w-9 h-9' : 'p-4' } flex items-center justify-center`}>
+          <Twitter className={`text-cyan-300 ${isMobile ? 'w-5 h-5' : 'w-8 h-8'}`} />
         </motion.div>
         <span className='absolute left-full ml-2 top-1/2 -translate-y-1/2 text-cyan-300 text-sm font-medium bg-slate-900/90 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap hidden md:block'>
           Twitter/X
@@ -128,17 +168,11 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
         rel='noopener noreferrer'
         className='relative group'
       >
-        <motion.div
-          whileHover={{ scale: 1.2, rotate: -5 }}
-          whileTap={{ scale: 0.9 }}
-          className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-blue-500/30 shadow-md shadow-blue-500/10 ${
-            isMobile ? 'p-2' : 'p-4'
-          }`}
-        >
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-blue-500/30 shadow-md shadow-blue-500/10 ${isMobile ? 'w-9 h-9' : 'p-4'} flex items-center justify-center`}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
-            width={isMobile ? '16' : '32'}
-            height={isMobile ? '16' : '32'}
+            width={isMobile ? '20' : '32'}
+            height={isMobile ? '20' : '32'}
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
@@ -164,17 +198,11 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
         rel='noopener noreferrer'
         className='relative group'
       >
-        <motion.div
-          whileHover={{ scale: 1.2, rotate: -5 }}
-          whileTap={{ scale: 0.9 }}
-          className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-indigo-500/30 shadow-md shadow-indigo-500/10 ${
-            isMobile ? 'p-2' : 'p-4'
-          }`}
-        >
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-indigo-500/30 shadow-md shadow-indigo-500/10 ${isMobile ? 'w-9 h-9' : 'p-4'} flex items-center justify-center`}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
-            width={isMobile ? '16' : '32'}
-            height={isMobile ? '16' : '32'}
+            width={isMobile ? '20' : '32'}
+            height={isMobile ? '20' : '32'}
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
@@ -195,6 +223,8 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
           {t('social.discord')}
         </span>
       </a>
+
+      </div>
 
     </motion.div>
   );
