@@ -143,32 +143,48 @@ export default function HomePage() {
   // Rendering loading screen
   if (isLoading || !isClient) {
     return (
-      <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900'>
-        <div className='mb-6 w-32 h-32 md:w-40 md:h-40 relative animate-pulse'>
-          <Image
-            src='/favicon.ico'
-            alt='CrazyCube Logo'
-            width={160}
-            height={160}
-            className='object-contain'
-            sizes='(max-width: 768px) 50vw, 160px'
-          />
+      <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 px-4'>
+        {/* Glow + spinner + logo */}
+        <div className='relative mb-8'>
+          <div className='absolute inset-0 w-32 h-32 md:w-40 md:h-40 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 rounded-full bg-cyan-500/10 blur-2xl' />
+          <div className='w-28 h-28 md:w-36 md:h-36 rounded-full border-2 border-cyan-400/20 border-t-cyan-400/80 animate-spin' />
+          <div className='absolute inset-0 flex items-center justify-center'>
+            <Image
+              src='/favicon.ico'
+              alt='CrazyCube Logo'
+              width={128}
+              height={128}
+              className='object-contain drop-shadow-[0_0_12px_rgba(56,189,248,.45)]'
+              sizes='(max-width: 768px) 35vw, 128px'
+            />
+          </div>
         </div>
+
+        {/* Title */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1, rotate: [0, 10, -10, 0] }}
-          transition={{ duration: 0.5, repeat: Number.POSITIVE_INFINITY }}
-          className='text-4xl md:text-6xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-300 mb-4'
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className='text-center text-3xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-cyan-200'
         >
-          Loading...
+          {t?.('loading', 'Loading...')}
         </motion.div>
+
+        {/* Subtitle with gentle pulse and dots */}
         <motion.p
           initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 1, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-          className='text-xl text-cyan-300'
+          animate={{ opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 1.6, repeat: Number.POSITIVE_INFINITY }}
+          className='mt-2 text-center text-sm md:text-base text-cyan-200/80 max-w-[22rem]'
         >
-          Oh no, the site is stuck! Wait, we&apos;re just lazy 🦥
+          {t?.('loadingSubtitle', 'Preparing your CrazyCube experience')}
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ duration: 1.6, repeat: Number.POSITIVE_INFINITY, delay: 0.2 }}
+          >
+            …
+          </motion.span>
         </motion.p>
       </div>
     );
