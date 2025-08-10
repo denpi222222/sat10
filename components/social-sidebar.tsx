@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import type { MotionStyle } from 'framer-motion';
 import { Twitter, X } from 'lucide-react';
 import { useMobile } from '@/hooks/use-mobile';
 import React from 'react';
@@ -59,8 +60,10 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
         touchStartYRef.current = e.touches[0]?.clientY ?? null;
       };
       const onTouchMove = (e: TouchEvent) => {
-        if (touchStartYRef.current === null) return;
-        const dy = e.touches[0].clientY - touchStartYRef.current;
+        const startY = touchStartYRef.current;
+        const firstTouch = e.touches && e.touches.length > 0 ? e.touches[0] : undefined;
+        if (startY === null || !firstTouch) return;
+        const dy = (firstTouch.clientY ?? 0) - startY;
         if (dy > 24) {
           setIsVisible(false);
           touchStartYRef.current = null;
@@ -114,6 +117,8 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
     ? 'fixed left-0 right-0 z-50 flex-row justify-center pointer-events-none'
     : 'fixed top-1/2 -translate-y-1/2 left-0 z-50 flex-col';
 
+  const motionStyle: MotionStyle = isMobile ? { bottom: bottomOffset } : {};
+
   return (
     <motion.div
       initial={isMobile ? { y: 120, opacity: 0 } : { x: -100 }}
@@ -128,7 +133,7 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
       }
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       className={`${sidebarClass}`}
-      style={isMobile ? { bottom: bottomOffset } : undefined}
+      style={motionStyle}
     >
       <div className={`flex items-center gap-2 bg-gradient-to-r from-slate-900/90 to-blue-900/90 backdrop-blur-md border border-cyan-500/20 shadow-lg shadow-cyan-500/10 ${
         isMobile ? 'mx-auto max-w-[220px] px-2 py-2 rounded-full relative pointer-events-auto' : 'max-w-[300px] p-1 rounded-full'
