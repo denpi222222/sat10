@@ -62,7 +62,7 @@ export default function GraveyardPage() {
     );
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-4'>
+    <div className='min-h-screen mobile-content-wrapper bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-4 pb-24'>
       {/* Quick cube disintegration animation on page entry */}
       {showCubeAnimation && (
         <motion.div
@@ -185,7 +185,7 @@ export default function GraveyardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1.0 }} // Appear after 1 second delay
             >
-              <div className='flex flex-wrap gap-3 overflow-x-auto'>
+              <div className='nft-card-grid gap-3'>
                 {tokenIds.slice(0, 20).map((id, idx) => (
                   <motion.div
                     key={id}
