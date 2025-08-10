@@ -501,7 +501,7 @@ export default function BreedPage() {
   }, [liveRevived, refetch]);
 
   return (
-    <div className='min-h-screen mobile-content-wrapper relative p-4'>
+    <div className='min-h-screen mobile-content-wrapper relative p-4 pb-24'>
       {/* Full screen gradient background */}
       <div className='fixed inset-0 -z-10 bg-gradient-to-br from-pink-900 via-purple-900 to-pink-900' />
       

@@ -105,6 +105,14 @@
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
     gap: 0.5rem !important;
   }
+
+  /* Force single-column cards on very narrow phones to avoid overflow in any language */
+  @media (max-width: 420px) {
+    .nft-card-grid {
+      grid-template-columns: 1fr !important;
+      gap: 0.625rem !important;
+    }
+  }
   
   /* Optimize text sizes for mobile readability */
   .mobile-safe-text {

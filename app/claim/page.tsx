@@ -133,7 +133,7 @@ export default function ClaimPage() {
   }
 
   return (
-    <div className='min-h-screen mobile-content-wrapper bg-gradient-to-br from-yellow-900 via-amber-900 to-yellow-900 p-4'>
+    <div className='min-h-screen mobile-content-wrapper bg-gradient-to-br from-yellow-900 via-amber-900 to-yellow-900 p-4 pb-24'>
       {/* Use only our new coin animation with high intensity */}
       <CoinsAnimation intensity={isMobile ? 1.5 : 2.5} />
 
