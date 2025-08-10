@@ -486,47 +486,47 @@ function NFTPingCardComponent({
           </CardHeader>
 
           <CardContent className='flex-1 pt-0 pb-2 px-2 text-[9px] space-y-0.5'>
-            <div className='flex justify-between text-cyan-300'>
+            <div className='flex justify-between items-center text-cyan-300 min-w-0 gap-2'>
               <span>{t('sections.ping.basePerHour', 'Base/h')}</span>
-              <span className='font-mono font-semibold text-cyan-100'>
+              <span className='font-mono font-semibold text-cyan-100 ml-2 text-right truncate max-w-[60%]'>
                 {earnings ? formatCRADisplay(earnings.basePerHour) : '...'}
               </span>
             </div>
-            <div className='flex justify-between text-yellow-300'>
+            <div className='flex justify-between items-center text-yellow-300 min-w-0 gap-2'>
               <span>{t('sections.ping.rarity', 'Rarity')}</span>
-              <span className='font-mono font-semibold text-yellow-100'>
+              <span className='font-mono font-semibold text-yellow-100 ml-2 text-right truncate max-w-[60%]'>
                 +{earnings ? earnings.rarityPercent.toFixed(1) : 0}%
               </span>
             </div>
-            <div className='flex justify-between text-orange-300'>
+            <div className='flex justify-between items-center text-orange-300 min-w-0 gap-2'>
               <span>
                 {earnings && earnings.streakPercent >= 0
                   ? t('sections.ping.streak', 'Streak')
                   : t('sections.ping.penalty', 'Penalty')}
               </span>
-              <span className='font-mono font-semibold text-orange-100'>
+              <span className='font-mono font-semibold text-orange-100 ml-2 text-right truncate max-w-[60%]'>
                 {earnings && earnings.streakPercent >= 0 ? '+' : ''}
                 {earnings ? earnings.streakPercent.toFixed(1) : 0}%
               </span>
             </div>
-            <div className='flex justify-between text-amber-300'>
+            <div className='flex justify-between items-center text-amber-300 min-w-0 gap-2'>
               <span>{t('sections.ping.totalBonus', 'Total Bonus')}</span>
-              <span className='font-mono font-semibold text-amber-100'>
+              <span className='font-mono font-semibold text-amber-100 ml-2 text-right truncate max-w-[60%]'>
                 {earnings && earnings.bonusPercent >= 0 ? '+' : ''}
                 {earnings ? earnings.bonusPercent.toFixed(1) : 0}%
               </span>
             </div>
-            <div className='flex justify-between text-emerald-300 font-semibold'>
+            <div className='flex justify-between items-center text-emerald-300 font-semibold min-w-0 gap-2'>
               <span>24h</span>
-              <span className='font-mono text-emerald-100'>
+              <span className='font-mono text-emerald-100 ml-2 text-right truncate max-w-[60%]'>
                 {earnings ? formatCRADisplay(earnings.totalPerDay) : '...'}
               </span>
             </div>
-            <div className='flex justify-between text-lime-300 font-semibold'>
+            <div className='flex justify-between items-center text-lime-300 font-semibold min-w-0 gap-2'>
               <span>{t('sections.ping.pending', 'Pending')}</span>
               <span
                 className={cn(
-                  'font-mono',
+                  'font-mono ml-2 text-right truncate max-w-[60%]',
                   isActivated &&
                     parseFloat(
                       formatCRADisplay(displayPendingWei)
@@ -544,27 +544,27 @@ function NFTPingCardComponent({
             </div>
             {/* Time accumulation info - show for all activated NFTs */}
             {isActivated && (
-              <div className='flex justify-between text-blue-300 text-[9px]'>
+              <div className='flex justify-between items-center text-blue-300 text-[9px] min-w-0 gap-2'>
                 <span>⏰ {t('sections.ping.accumulated', 'Accumulated')}</span>
-                <span className='font-mono text-blue-100'>
+                <span className='font-mono text-blue-100 ml-2 text-right truncate max-w-[60%]'>
                   {formatTimeAccumulation(timeSinceLastPing)}
                 </span>
               </div>
             )}
             {/* Time until next ping - only show if not ready */}
             {!pingReady && (
-              <div className='flex justify-between text-orange-300 text-[9px]'>
+              <div className='flex justify-between items-center text-orange-300 text-[9px] min-w-0 gap-2'>
                 <span>⏳ {t('sections.ping.nextPing', 'Next Ping')}</span>
-                <span className='font-mono text-orange-100'>
+                <span className='font-mono text-orange-100 ml-2 text-right truncate max-w-[60%]'>
                   {formatTimeUntilPing(timeUntilNextPing)}
                 </span>
               </div>
             )}
-            <div className='flex justify-between text-purple-300 font-semibold'>
+            <div className='flex justify-between items-center text-purple-300 font-semibold min-w-0 gap-2'>
               <span>{t('sections.ping.lockedCRAA', 'Locked CRAA')}</span>
               <span
                 className={cn(
-                  'font-mono',
+                  'font-mono ml-2 text-right truncate max-w-[60%]',
                   hasActiveCooldown && parseFloat(lockedCRAA.toString()) > 0
                     ? 'text-purple-300 font-bold bg-purple-900/30 px-1 rounded animate-pulse'
                     : 'text-purple-100'
@@ -575,18 +575,18 @@ function NFTPingCardComponent({
             </div>
             {/* Status line for ready NFTs to match cooldown NFT line count */}
             {pingReady && (
-              <div className='flex justify-between text-indigo-300 text-[9px]'>
+              <div className='flex justify-between items-center text-indigo-300 text-[9px] min-w-0 gap-2'>
                 <span>{t('sections.ping.status', 'Status')}</span>
-                <span className='font-mono text-indigo-100'>
+                <span className='font-mono text-indigo-100 ml-2 text-right truncate max-w-[60%]'>
                   {t('sections.ping.active', 'Active')}
                 </span>
               </div>
             )}
             {/* Extra line for non-activated NFTs to keep card heights equal */}
             {!isActivated && (
-              <div className='flex justify-between text-gray-400 text-[9px]'>
+              <div className='flex justify-between items-center text-gray-400 text-[9px] min-w-0 gap-2'>
                 <span>&nbsp;</span>
-                <span className='font-mono text-gray-300'>—</span>
+                <span className='font-mono text-gray-300 ml-2 text-right truncate max-w-[60%]'>—</span>
               </div>
             )}
           </CardContent>
