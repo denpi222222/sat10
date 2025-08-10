@@ -135,9 +135,13 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
       className={`${sidebarClass}`}
       style={motionStyle}
     >
-      <div className={`flex items-center gap-2 bg-gradient-to-r from-slate-900/90 to-blue-900/90 backdrop-blur-md border border-cyan-500/20 shadow-lg shadow-cyan-500/10 ${
-        isMobile ? 'mx-auto max-w-[220px] px-2 py-2 rounded-full relative pointer-events-auto' : 'max-w-[300px] p-1 rounded-full'
-      }`}>
+      <div
+        className={
+          isMobile
+            ? 'flex items-center gap-2 mx-auto max-w-[220px] px-2 py-2 rounded-full relative pointer-events-auto bg-gradient-to-r from-slate-900/90 to-blue-900/90 backdrop-blur-md border border-cyan-500/20 shadow-lg shadow-cyan-500/10'
+            : 'flex flex-col items-center gap-2 p-2 rounded-xl pointer-events-auto bg-gradient-to-b from-slate-900/90 to-blue-900/90 backdrop-blur-md border border-cyan-500/20 shadow-lg shadow-cyan-500/10'
+        }
+      >
       {/* Close button for mobile */}
       {isMobile && isVisible && (
         <button
@@ -158,12 +162,14 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
         rel='noopener noreferrer'
         className='relative group'
       >
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-cyan-500/30 shadow-md shadow-cyan-500/10 ${isMobile ? 'w-9 h-9' : 'p-4' } flex items-center justify-center`}>
-          <Twitter className={`text-cyan-300 ${isMobile ? 'w-5 h-5' : 'w-8 h-8'}`} />
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-cyan-500/30 shadow-md shadow-cyan-500/10 ${isMobile ? 'w-9 h-9' : 'w-10 h-10'} flex items-center justify-center`}>
+          <Twitter className={`text-cyan-300 ${isMobile ? 'w-5 h-5' : 'w-5 h-5'}`} />
         </motion.div>
-        <span className='absolute left-full ml-2 top-1/2 -translate-y-1/2 text-cyan-300 text-sm font-medium bg-slate-900/90 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap hidden md:block'>
-          Twitter/X
-        </span>
+        {!isMobile && (
+          <span className='absolute left-full ml-2 top-1/2 -translate-y-1/2 text-cyan-300 text-xs font-medium bg-slate-900/90 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap'>
+            Twitter/X
+          </span>
+        )}
       </a>
 
       {/* Telegram */}
@@ -173,11 +179,11 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
         rel='noopener noreferrer'
         className='relative group'
       >
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-blue-500/30 shadow-md shadow-blue-500/10 ${isMobile ? 'w-9 h-9' : 'p-4'} flex items-center justify-center`}>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-blue-500/30 shadow-md shadow-blue-500/10 ${isMobile ? 'w-9 h-9' : 'w-10 h-10'} flex items-center justify-center`}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
-            width={isMobile ? '20' : '32'}
-            height={isMobile ? '20' : '32'}
+            width={isMobile ? '20' : '20'}
+            height={isMobile ? '20' : '20'}
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
@@ -203,11 +209,11 @@ export const SocialSidebar = React.memo(function SocialSidebar() {
         rel='noopener noreferrer'
         className='relative group'
       >
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-indigo-500/30 shadow-md shadow-indigo-500/10 ${isMobile ? 'w-9 h-9' : 'p-4'} flex items-center justify-center`}>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-full border border-indigo-500/30 shadow-md shadow-indigo-500/10 ${isMobile ? 'w-9 h-9' : 'w-10 h-10'} flex items-center justify-center`}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
-            width={isMobile ? '20' : '32'}
-            height={isMobile ? '20' : '32'}
+            width={isMobile ? '20' : '20'}
+            height={isMobile ? '20' : '20'}
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
